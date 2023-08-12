@@ -1,4 +1,55 @@
-<!-- header start -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Admin side </title>
+         <meta name="description" content="SubAndGain Telecommunication gives the best and cheapest mobile data, cable tv subscription, electricity, airtime vtu and education bills. It makes life easier by giving out a certain dicount for any transaction made on the SubAndGain. "/>
+    <meta name="keywords" content="Data,Airtime VTU,DSTV,GOTV,SMILE,STARTIMES,WAEC,NECO,Electricity,Prepaid,Postpaid" />
+    <meta name="author" content="SUBANDGAIN" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" href="../images/favicon.png">
+        <!-- Place favicon.ico in the root directory -->
+		<!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <!-- Our Custom CSS -->
+    
+
+    <!-- Font Awesome JS -->
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="css/style3.css">
+    
+		<!-- all css here -->
+         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/bootstrap-grid.css">
+        <link rel="stylesheet" href="css/bootstrap-grid.min.css">
+        <link rel="stylesheet" href="css/bootstrap-reboot.css">
+        <link rel="stylesheet" href="css/bootstrap-reboot.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/pe-icon-7-stroke.css">
+        <link rel="stylesheet" href="css/owl.carousel.css">
+		<link rel="stylesheet" href="css/magnific-popup.css">
+		<link rel="stylesheet" href="css/meanmenu.css">
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="css/responsive.css">
+        <link rel="stylesheet" href="css/animation.css">
+        
+       <!-- Font Awesome JS -->
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=3-9ylsT56cTQ24En3TfPhG-EV4IH2_nH3k7mZp-FSloJycIMIFAaUWAIvZurRq3XYEfURBuQSxEVdUzBxwaJxw" charset="UTF-8"></script><style>
+       
+        .mCSB_dragger_bar{
+            width: 10px !important;;
+        }
+    </style>
+    </head>
+    <body>
+        
+     <!-- header start -->
+
 <header>
 			<nav id="sidebar">
             <div id="dismiss">

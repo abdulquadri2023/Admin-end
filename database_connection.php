@@ -4,7 +4,7 @@ $data_connection = mysqli_connect("localhost", "root", "", "database_connection.
 
 if($data_connection){
 
-   // echo "good to go!";
+   
 }
 
 ?>

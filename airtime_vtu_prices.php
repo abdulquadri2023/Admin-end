@@ -1,4 +1,32 @@
-<?php 
+<?php
+session_start();
+include "database_connection.php";
+$required = "";
+
+if(isset($_SESSION['adminend'])){
+
+  $user_name = $_SESSION['adminend'];
+  if($_SESSION['adminend']){
+    echo "nice work";
+}
+  $sql = "SELECT * FROM dashboard_table WHERE user_name = '$user_name' LIMIT 1";
+  $con = mysqli_query($data_connection, $sql);
+  $num = mysqli_num_rows($con);
+  if($num > 0 ){
+
+    $assoc = mysqli_fetch_assoc($con);
+    $wallet = $assoc['wallet'];
+    $status = $assoc['status'];
+
+  }else{
+    header("Location: index.php");
+    die();
+  }
+}else{
+  header("Location: index.php");
+  die();
+}
+
 include "header.php";
 
 
@@ -110,13 +138,120 @@ include "header.php";
                  </tr>
                </thead>
              <tbody>
-                              
+              <tr>
+                <?php 
+                if(isset($_GET['pages']) && $_GET['pages'] != ""){ 
+                  
+                  $pages = $_GET['pages'];
+                }else{
+                  $pages = 1;
+                 } 
+
+                 $records = 10;
+                 $offset = ($pages-1) * $records;
+                 $previous = $pages - 1;
+                 $next = $pages + 1;
+                 $adjacents = "2"; 
+               
+                
+                $con = mysqli_query($data_connection, "SELECT COUNT(*) AS total_records FROM transaction_history");
+                $fetch = mysqli_fetch_array($con);
+                $all_data = $fetch['total_records'];
+                $total_pages = ceil($all_data/$records);
+                $second_last = $total_pages -1;
+
+                //$vtu = "MTN && GLO && 9MOBILE && AIRTEL";
+                  $sql1 = "SELECT * FROM transaction_history ORDER BY id DESC LIMIT $offset, $records";
+                  $con1 = mysqli_query($data_connection, $sql1);
+                  while($transaction = mysqli_fetch_assoc($con1)) { ?>
+
+                  <td> <?php echo $transaction['category']; ?> </td>
+                  <td> <?php echo $transaction['phone_number']; ?> </td>
+                  <td> <?php echo $transaction['amount']; ?> </td>
+                  <td style = "color: red"> <b> <?php if($transaction['status'] == "pending" || $transaction['status'] == "cancelled"){ ?> 
+                    <?php echo $transaction['status']; ?></b>
+                  <?php } if($transaction['status'] == "Approved" || $transaction['status'] == "SUCCESSFUL"){ ?>
+                  <b style = "color: green"> <?php echo $transaction['status']; ?> </b> </td>
+                  <?php }?> </td>
+                  <td> <?php echo $transaction['transaction_id']; ?> </td>
+                  <td> <?php echo $transaction['date']; ?> </td>             
+
+              </tr>
+              <?php  } mysqli_close($data_connection); ?>               
 
              </tbody>
              </table>
              <a href="transaction.php"> <button type="submit" class="btnn btn-primary"> View All </button> </a>
            </div>
+           <div style='padding: 10px 10px 0px; border-top: dotted 1px #CCC;'>
          </div>
+            <ul class = "pagination"> 
+                <?php //if($pages > 1){ echo "<li><a href = '$pages?=1'";} ?>
+                  <li <?php if($pages <= 1 ){ echo "class= 'disabled'";} ?> >
+                    <a <?php if($pages > 1 ){echo "href = '?pages=1'";} ?>>&lsaquo;&lsaquo; First </a>
+                  </li>
+                  <li <?php if($pages <= 1 ){ echo "class= 'disabled'";} ?> >
+                    <a <?php if($pages > 1 ){echo "href = '?pages=$previous'";} ?>> Prev </a>
+                  </li>
+                  <?php 
+                  if($total_pages <= 10 ){
+                    for($count = 1; $count <= $total_pages; $count++){
+                      if($count == $pages){
+                        echo "<li class = 'active'> <a> $count </a></li>";
+                      }else{
+                        echo "<li><a href = '?pages=$count'> $count </a></li>";
+                      }
+                    }
+                  }
+                  elseif($total_pages > 10){
+                    if($pages <= 4){
+                    for($count = 1; $count < 8; $count++){
+                      if($count == $pages ){
+                        echo "<li class = 'active'> <a> $count </a></li>";
+                      }else{
+                        echo "<li><a href = '?pages=$count'> $count </a></li>";
+                      }
+                    }
+                    echo "<li><a> .... </a> </li>";
+                    echo "<li><a href = '?pages=$second_last'> $second_last </a> </li>";
+                    echo "<li><a href = '?pages=$total_pages'> $total_pages </a> </li>";
+                  }
+                  elseif($pages > 4 && $pages < $total_pages - 4 ){
+                    echo "<li><a href = '?pages=1'> 1 </a> </li>";
+                    echo "<li><a href = '?pages=2'> 2 </a> </li>";
+                    for($count = $pages - $adjacents; $count <= $pages + $adjacents; $count++){
+                      if($count == $pages){
+                        echo "<li class = 'active'> <a> $count </a></li>";
+                      }else{
+                        echo "<li><a href = '?pages=$count'> $count </a> </li>";
+                      }
+                    }
+                    echo "<li><a> .... </a> </li>";
+                    echo "<li><a href = '?pages=$second_last'> $second_last </a> </li>";
+                    echo "<li><a href = '?pages=$total_pages'> $total_pages </a> </li>";
+                  }
+                  else {
+                    echo "<li><a href='?pages=1'>1</a></li>";
+                    echo "<li><a href='?pages=2'>2</a></li>";
+                    echo "<li><a>...</a></li>";
+            
+                    for ($count = $total_pages - 6; $count <= $total_pages; $count++) {
+                      if ($counter == $page_no) {
+                   echo "<li class='active'><a>$count</a></li>";  
+                    }else{
+                       echo "<li><a href='?pages=$count'>$count</a></li>";
+                    }                   
+                   }
+                  }
+                }
+              ?>
+                  <li <?php if($pages >= $total_pages){ echo "class='disbled'"; } ?>>
+                  <a <?php if($pages < $total_pages) { echo "href='?pages=$next'"; } ?>>Next</a>
+                  </li>
+                  <?php if($pages < $total_pages){
+                    echo "<li><a href='?pages=$total_pages'>Last &rsaquo;&rsaquo;</a></li>";
+                  } ?> 
+            </ul>
    	</div>
    </div>
    	</div>
