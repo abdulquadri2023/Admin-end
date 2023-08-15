@@ -1,9 +1,131 @@
 <?php 
+session_start();
+include "database_connection.php";
+$required = $success = $search = "";
+
+if(isset($_SESSION['adminend'])){
+
+  $user_name = $_SESSION['adminend'];
+
+  $sql = "SELECT * FROM dashboard_table WHERE user_name = '$user_name' LIMIT 1";
+  $con = mysqli_query($data_connection, $sql);
+  $num = mysqli_num_rows($con);
+  if($num > 0 ){
+
+    $assoc = mysqli_fetch_assoc($con);
+    $wallet = $assoc['wallet'];
+    $status = $assoc['status'];
+
+  }else{
+    header("Location: index.php");
+    die();
+  }
+}else{
+  header("Location: index.php");
+  die();
+}
+
+if(isset($_POST['settings'])){
+
+  $admin = filter_var($_POST['Admin-username'], FILTER_SANITIZE_STRING); 
+  $contact = filter_var($_POST['Company-contact'], FILTER_SANITIZE_STRING); 
+  $whatsapp = filter_var($_POST['Company-whatsapp'], FILTER_SANITIZE_STRING); 
+  $address = filter_var($_POST['Company-address'], FILTER_SANITIZE_STRING); 
+  $email = filter_var($_POST['Company-email'], FILTER_SANITIZE_STRING); 
+  $link = filter_var($_POST['Group-link'], FILTER_SANITIZE_STRING); 
+  $bank = filter_var($_POST['bank'], FILTER_SANITIZE_STRING); 
+  $account = filter_var($_POST['Account-name'], FILTER_SANITIZE_STRING); 
+  $account_number = filter_var($_POST['Account-number'], FILTER_SANITIZE_STRING); 
+
+  if($admin == ""){
+
+     $required = "Company Username is required"; 
+  }
+  if($contact == ""){
+
+    $required = "Company Contact number is required"; 
+ }
+ if($whatsapp == ""){
+
+    $required = "Company Whatsapp number is required"; 
+ }
+ if($address == ""){
+
+    $required = "Company address is required"; 
+ }
+ if($email == ""){
+
+    $required = "Company email is required"; 
+ }
+ if($link == ""){
+
+    $required = "Company whatsapp link is required"; 
+ }
+ if($bank == ""){
+
+    $required = "Company bank name is required"; 
+ }
+ if($account == ""){
+
+    $required = "Company accountname is required"; 
+ }
+ if($account_number == ""){
+
+    $required = "Company account number is required"; 
+ }
+
+}
+/*
+    $sql1 = "SELECT * FROM company_details";
+    $con1 = mysqli_query($data_connection, $sql1);
+    $num = mysqli_num_rows($con1);
+    if($num > 0 ){
+   
+       $assoc1 = mysqli_fetch_assoc($con1);
+       $admin = $assoc1['name']; 
+       $email = $assoc1['email']; 
+       $contact = $assoc1['phone']; 
+       $whatsapp = $assoc1['whatsapp']; 
+       $link = $assoc1['group_whatsapp']; 
+       $bank = $assoc1['bank']; 
+       $account = $assoc1['account_name']; 
+       $account_number = $assoc1['account_number']; 
+       $address = $assoc1['address']; 
+      // echo "is set";
+    }
+*/
+if($required == ""){    
+    
+    $sql2 = "UPDATE company_details SET name = '$admin', email = '$email', phone = '$contact', whatsapp = '$whatsapp', 
+    group_whatsapp = '$link', bank = '$bank', account_name = '$account', account_number = '$account_number', address = '$address'";
+    $con2 = mysqli_query($data_connection, $sql2);
+/*
+    $sql4 = "INSERT INTO company_details (name, email, phone, whatsapp, group_whatsapp, bank, account_name, account_number, address)
+    VALUES('$admin', '$email', '$contact', '$whatsapp', '$link', '$bank', '$account', '$account_number', '$address')";
+    $con4 = mysqli_query($data_connection, $sql4);
+*/
+    $success = "Your information has been updated";
+}
+
+$sql3 = "SELECT * FROM company_details";
+$con3 = mysqli_query($data_connection, $sql3);
+$num3 = mysqli_num_rows($con3);
+if($num3 > 0 ){
+
+   $assoc3 = mysqli_fetch_assoc($con3);
+   $admin = $assoc3['name']; 
+   $email = $assoc3['email']; 
+   $contact = $assoc3['phone']; 
+   $whatsapp = $assoc3['whatsapp']; 
+   $link = $assoc3['group_whatsapp']; 
+   $bank = $assoc3['bank']; 
+   $account = $assoc3['account_name']; 
+   $account_number = $assoc3['account_number']; 
+   $address = $assoc3['address']; 
+  // echo "is set";
+}
+
 include "header.php";
-
-
-
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -104,55 +226,58 @@ include "header.php";
                             </div>
                             
                             <div class="col-md-12 col-sm-12">
+                                <?php include "alert.php"; ?>
                                 <label> Admin Username </label>
-                                <input type="text"  placeholder="Admin" name="Admin-username" required>
+                                <input type="text"  placeholder="Admin" name="Admin-username" value ="<?php echo $admin; ?>" required>
                             </div>
 
                             <div class="col-md-12 col-sm-12">
                                 <label> Company Contact Number </label>
-                                <input type="text"  placeholder="+2348123456789" name="Company-contact" required>
+                                <input type="text"  placeholder="+2348123456789" name="Company-contact" value = "<?php echo $contact; ?>" required>
                             </div>
 
                             <div class="col-md-12 col-sm-12">
                                 <label> Company Whatsapp number </label>
-                                <input type="text"  placeholder="+2348123456789" name="Company-whatsapp" required>
+                                <input type="text"  placeholder="+2348123456789" name="Company-whatsapp" value = "<?php echo $whatsapp; ?>" required>
                             </div>
 
                             <div class="col-md-12 col-sm-12">
                                 <label> Company Address </label>
-                                <input type="text"  placeholder="AZ 1 Abuja" name="Company-address" required>
+                                <input type="text"  placeholder="AZ 1 Abuja" name="Company-address" value = "<?php echo $address; ?>" required>
                             </div>
 
                             <div class="col-md-12 col-sm-12">
                                 <label> Company Email </label>
-                                <input type="text"  placeholder="SubandGain@gmail.com" name="Company-email" required>
+                                <input type="text"  placeholder="SubandGain@gmail.com" name="Company-email" value = "<?php echo $email; ?>" required>
                             </div>
 
                             <div class="col-md-12 col-sm-12">
                                 <label> Company Whatsapp Group Link </label>
-                                <input type="text"  placeholder="Company Whatsapp Group Link" name="Group-link" required>
+                                <input type="text"  placeholder="Company Whatsapp Group Link" name="Group-link" value = "<?php echo $link; ?>" required>
                             </div>
-
-                            <div class="col-md-12 col-sm-4">
-                              BANK
-                            </div>
-
+                           
                             <div class="col-md-12 col-sm-12">
-                                <input type="text"  placeholder="Wema" name="wema" required>
+                            <label> Bank </label>
+                                <select name = "bank" class = "form-control"> 
+                                    <option value = ""> Select Bank </option>
+                                    <option value = "Access Bank"> Access Bank </option>
+                                    <option value = "Fidelity Bank"> Fidelity Bank </option>
+                                    <option value = "Keystone Bank"> Keystone Bank </option>
+                                </select>
                             </div>
 
                             <div class="col-md-12 col-sm-12">
                                 <label> Account Name </label>
-                                <input type="text"  placeholder="SubandGain" name="Account-name" required>
+                                <input type="text"  placeholder="SubandGain" name="Account-name" value = "<?php echo $account; ?>" required>
                             </div>
 
                             <div class="col-md-12 col-sm-12">
                                 <label> Account Number </label>
-                                <input type="text"  placeholder="1234567890" name="Account-number" required>
+                                <input type="text"  placeholder="1234567890" name="Account-number" value = "<?php echo $account_number; ?>" required>
                             </div>
 
                             <div class="col-md-4 col-sm-4">
-                                <input class="btn btn-primary" type="submit" name="login" value = "Search">
+                                <input class="btn btn-primary" type="submit" name="settings" value = "Search">
                             </div>
                             
                             </div>

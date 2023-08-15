@@ -1,4 +1,52 @@
 <?php 
+session_start();
+include "database_connection.php";
+$required = $success = $search = "";
+
+if(isset($_SESSION['adminend'])){
+
+  $user_name = $_SESSION['adminend'];
+
+  $sql = "SELECT * FROM dashboard_table WHERE user_name = '$user_name' LIMIT 1";
+  $con = mysqli_query($data_connection, $sql);
+  $num = mysqli_num_rows($con);
+  if($num > 0 ){
+
+    $assoc = mysqli_fetch_assoc($con);
+    $wallet = $assoc['wallet'];
+    $status = $assoc['status'];
+
+  }else{
+    header("Location: index.php");
+    die();
+  }
+}else{
+  header("Location: index.php");
+  die();
+}
+
+if(isset($_POST['search'])){
+
+  $username = filter_var($_POST['name'], FILTER_SANITIZE_STRING); 
+
+  if($username == ""){
+
+     $required = "Username or email or phone number is required"; 
+  }
+  
+  $sql1 = "SELECT * FROM register_info WHERE user_name = '$username' OR email = '$username' OR phone_number = '$username' ";
+  $con1 = mysqli_query($data_connection, $sql1);
+  if(mysqli_num_rows($con1) > 0 ){
+
+    $assoc1 = mysqli_fetch_assoc($con1);
+    $search = $assoc1['user_name'];
+    $success = "User is found";
+  }else{
+
+    $required = "User doest not found!";
+  }
+}
+
 include "header.php";
 
 
@@ -98,17 +146,18 @@ include "header.php";
             <form id="contact-form" class="" method="post">
 
                             <div class="row">
-
                             <div class="col-md-12 col-sm-4">
                               SEARCH 
                             </div>
                             
                             <div class="col-md-12 col-sm-12">
-                                <input type="text"  placeholder="Username/Email/Phone Number" name="unamepname" required>
+                            <?php include "alert.php"; ?>
+
+                                <input type="text"  placeholder="Username/Email/Phone Number" name="name" required>
                             </div>
 
                             <div class="col-md-4 col-sm-4">
-                                <input class="btn btn-primary" type="submit" name="login" value = "Search">
+                                <input class="btn btn-primary" type="submit" name="search" value = "Search">
                             </div>
                             
                             </div>
@@ -136,20 +185,39 @@ include "header.php";
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                <tr>
-                <th> Service </th>
-                 <th> Number </th>
-                  <th> Price </th>
-                   <th> Status </th>
-                    <th> Trans. Id </th>
+                <th> First Name </th>
+                 <th> Last Name </th>
+                  <th> Username </th>
+                   <th> Email </th>
+                    <th> Phone Number </th>
+                   <th> Wallet </th>
                    <th> Date </th>
+                   <th> Query </th>
                  </tr>
                </thead>
              <tbody>
-                              
+                 <?php
+                  $sql2 = "SELECT * FROM register_info WHERE user_name = '$search' LIMIT 1";
+                  $con2 = mysqli_query($data_connection, $sql2);
+                  while($user = mysqli_fetch_assoc($con2)){ ?>
+
+                  <tr>
+                  <td> <?php echo $user['first_name']; ?> </td>
+                  <td> <?php echo $user['last_name']; ?> </td>
+                  <td> <?php echo $user['user_name']; ?> </td>
+                  <td> <?php echo $user['email']; ?> </td>
+                  <td> <?php echo $user['phone_number']; ?> </td>
+                  <td> <?php echo $user['wallet']; ?> </td>                  
+                  <td> <?php echo $user['date']; ?> </td>
+                  <td> <a href = "update_search.php?id=<?php echo $user['id']; ?>">
+                  <button style = "background-color: green; color: white;" > Edit </button> </a>
+                  </td>
+
+                  </tr>
+                <?php  }  ?>
 
              </tbody>
              </table>
-             <a href="transaction.php"> <button type="submit" class="btnn btn-primary"> View All </button> </a>
            </div>
          </div>
    	</div>

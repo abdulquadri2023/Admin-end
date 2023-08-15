@@ -63,7 +63,7 @@ echo $response;
 //decode response to get trans_ID,network,phone_number,amount,status and balance
 $array = json_decode($response, true); //decode the JSON response
 
-$sagbalance = $array['balance']; 
+//$sagbalance = $array['balance']; 
 
 $sql3 = "SELECT SUM(wallet) as total_wallet FROM register_info";
 $res3 = mysqli_query($data_connection, $sql3);
@@ -115,7 +115,7 @@ include "header.php";
               SubandGain Balance
               </div> 
               <div class="state-value">
-                     &#8358; <?php echo $sagbalance;?>           
+                     &#8358; <?php //echo $sagbalance;?>           
               </div>
          </div>
                  

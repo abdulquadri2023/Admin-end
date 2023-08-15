@@ -7,7 +7,7 @@ if(isset($_SESSION['adminend'])){
 
   $user_name = $_SESSION['adminend'];
   if($_SESSION['adminend']){
-    echo "nice work";
+    //echo "nice work";
 }
   $sql = "SELECT * FROM dashboard_table WHERE user_name = '$user_name' LIMIT 1";
   $con = mysqli_query($data_connection, $sql);
